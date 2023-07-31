@@ -1,11 +1,40 @@
+#-------- Default --------
 spring:
+  profiles:
+    default: product
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/**/*.xml
+
+---
+#-------- product --------
+spring:
+  config:
+    activate:
+      on-profile: product
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/board_db
     username: root
     password: 1234
 
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-  mapper-locations: classpath:mapper/**/*.xml
+
+---
+#-------- test --------
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test_board_db
+    username: root
+    password: 1234
+
+  sql:
+    init:
+      mode: always
