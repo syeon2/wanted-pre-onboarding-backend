@@ -6,7 +6,7 @@ create table member
 (
     id         bigint unsigned primary key auto_increment,
     email      varchar(255) not null,
-    password   varchar(40)  not null,
+    password   char(64)     not null,
     created_at timestamp    not null,
     updated_at timestamp    not null
 );
