@@ -14,6 +14,12 @@
         where id = #{id}
     </select>
 
+    <select id="findByEmail">
+        select *
+        from member
+        where email = #{email}
+    </select>
+
     <update id="update">
         update member
         set email      = #{updateParam.data.email},

@@ -15,6 +15,8 @@ public interface MemberMapper {
 
 	Optional<Member> findById(Long id);
 
+	Optional<Member> findByEmail(String email);
+
 	void update(@Param("id") Long id, @Param("updateParam") BaseEntity<Member> member);
 
 	void delete(Long id);

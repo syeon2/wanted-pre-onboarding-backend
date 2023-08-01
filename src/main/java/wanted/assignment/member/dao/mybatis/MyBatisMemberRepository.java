@@ -1,6 +1,7 @@
 package wanted.assignment.member.dao.mybatis;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -27,6 +28,11 @@ public class MyBatisMemberRepository implements MemberRepository {
 	public Member findById(Long id) {
 		return memberMapper.findById(id)
 			.orElseThrow(() -> new NoSuchElementException("해당 Id의 회원은 존재하지 않습니다."));
+	}
+
+	@Override
+	public Optional<Member> findByEmail(String email) {
+		return memberMapper.findByEmail(email);
 	}
 
 	@Override
