@@ -20,7 +20,6 @@ public class MemberController {
 	@PostMapping("/api/v1/member")
 	public ApiResult<Long> joinMember(@Valid @RequestBody MemberCreateRequest request) {
 		Long joinedMemberId = memberService.join(request.toServiceRequest());
-		
 		return ApiResult.onSuccess(joinedMemberId);
 	}
 }
