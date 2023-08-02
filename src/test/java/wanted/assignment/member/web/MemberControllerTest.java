@@ -1,5 +1,6 @@
 package wanted.assignment.member.web;
 
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -15,7 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import wanted.assignment.common.config.jwt.JwtAuthTokenProvider;
+import wanted.assignment.member.dao.domain.Member;
 import wanted.assignment.member.service.MemberService;
+import wanted.assignment.member.web.request.MemberSignInRequest;
 import wanted.assignment.member.web.request.MemberSignUpRequest;
 
 @WebMvcTest(controllers = MemberController.class)
@@ -105,6 +108,103 @@ class MemberControllerTest {
 		// when // then
 		mockMvc.perform(
 				post("/api/v1/sign-up")
+					.content(objectMapper.writeValueAsString(request))
+					.contentType(MediaType.APPLICATION_JSON)
+			)
+			.andDo(print())
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.data").doesNotExist())
+			.andExpect(jsonPath("$.message").value("비밀번호는 8자 이상 입력해주세요."));
+	}
+
+	@Test
+	@DisplayName("회원가입한 회원은 로그인이 정상처리됩니다.")
+	void signInMember() throws Exception {
+		// given
+		String email = "xxxxx@yyyyy";
+		String password = "yyyyyyyyyyy";
+
+		MemberSignInRequest request = MemberSignInRequest.builder()
+			.email(email)
+			.password(password)
+			.build();
+
+		Member responseMember = Member.builder().email(email).password(password).build();
+		when(memberService.login(email, password)).thenReturn(responseMember);
+
+		// when // then
+		mockMvc.perform(
+				post("/api/v1/sign-in")
+					.content(objectMapper.writeValueAsString(request))
+					.contentType(MediaType.APPLICATION_JSON)
+			)
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.message").doesNotExist())
+			.andExpect(jsonPath("$.data").isNotEmpty());
+	}
+
+	@Test
+	@DisplayName("로그인 시 아이디는 필수입니다.")
+	void signInMemberWithoutEmail() throws Exception {
+		// given
+		String password = "yyyyyyyyyyy";
+
+		MemberSignInRequest request = MemberSignInRequest.builder()
+			.password(password)
+			.build();
+
+		// when // then
+		mockMvc.perform(
+				post("/api/v1/sign-in")
+					.content(objectMapper.writeValueAsString(request))
+					.contentType(MediaType.APPLICATION_JSON)
+			)
+			.andDo(print())
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.data").doesNotExist())
+			.andExpect(jsonPath("$.message").value("이메일은 필수값입니다."));
+	}
+
+	@Test
+	@DisplayName("로그인 시 아이디를 올바른 이메일 형식으로 입력해주세요.")
+	void signInMemberWrongEmailFormat() throws Exception {
+		// given
+		String email = "xxxxxxx";
+		String password = "yyyyyyyyyyy";
+
+		MemberSignInRequest request = MemberSignInRequest.builder()
+			.email(email)
+			.password(password)
+			.build();
+
+		// when // then
+		mockMvc.perform(
+				post("/api/v1/sign-in")
+					.content(objectMapper.writeValueAsString(request))
+					.contentType(MediaType.APPLICATION_JSON)
+			)
+			.andDo(print())
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.data").doesNotExist())
+			.andExpect(jsonPath("$.message").value("올바른 이메일 형식으로 입력해주세요."));
+	}
+
+	@Test
+	@DisplayName("로그인 시 비밀번호를 8자 이상 입력해주세요.")
+	void signInMemberWrongPassword() throws Exception {
+		// given
+		String email = "xxxxxxx@yyyyyy.com";
+		String password = "yyy";
+
+		MemberSignInRequest request = MemberSignInRequest.builder()
+			.email(email)
+			.password(password)
+			.build();
+
+		// when // then
+		mockMvc.perform(
+				post("/api/v1/sign-in")
 					.content(objectMapper.writeValueAsString(request))
 					.contentType(MediaType.APPLICATION_JSON)
 			)
