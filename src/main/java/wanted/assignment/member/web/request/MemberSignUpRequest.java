@@ -10,7 +10,7 @@ import lombok.Getter;
 import wanted.assignment.member.service.request.MemberCreateServiceRequest;
 
 @Getter
-public class MemberCreateRequest {
+public class MemberSignUpRequest {
 
 	@NotBlank(message = "이메일은 필수값입니다.")
 	@Email(message = "올바른 이메일 형식으로 입력해주세요.")
@@ -20,7 +20,7 @@ public class MemberCreateRequest {
 	private final String password;
 
 	@Builder
-	private MemberCreateRequest(String email, String password) {
+	private MemberSignUpRequest(String email, String password) {
 		this.email = email;
 		this.password = password;
 	}

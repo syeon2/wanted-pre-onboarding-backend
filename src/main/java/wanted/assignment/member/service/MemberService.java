@@ -26,7 +26,7 @@ public class MemberService {
 		return memberRepository.save(member);
 	}
 
-	public Member signIn(String email, String password) {
+	public Member login(String email, String password) {
 		Member member = getMemberByEmail(email);
 		checkPassword(member, password);
 

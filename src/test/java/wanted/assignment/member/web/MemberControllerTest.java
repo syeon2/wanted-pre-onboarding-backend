@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import wanted.assignment.common.config.jwt.JwtAuthTokenProvider;
 import wanted.assignment.member.service.MemberService;
-import wanted.assignment.member.web.request.MemberCreateRequest;
+import wanted.assignment.member.web.request.MemberSignUpRequest;
 
 @WebMvcTest(controllers = MemberController.class)
 class MemberControllerTest {
@@ -37,7 +37,7 @@ class MemberControllerTest {
 	@DisplayName("회원을 등록합니다.")
 	void joinMember() throws Exception {
 		// given
-		MemberCreateRequest request = MemberCreateRequest.builder()
+		MemberSignUpRequest request = MemberSignUpRequest.builder()
 			.email("xxxxx@yyyyy")
 			.password("yyyyyyyyyyy")
 			.build();
@@ -56,7 +56,7 @@ class MemberControllerTest {
 	@DisplayName("회원 가입에는 이메일이 필수입니다.")
 	void joinMemberWithoutEmail() throws Exception {
 		// given
-		MemberCreateRequest request = MemberCreateRequest.builder()
+		MemberSignUpRequest request = MemberSignUpRequest.builder()
 			.password("yyyyyyyy")
 			.build();
 
@@ -76,7 +76,7 @@ class MemberControllerTest {
 	@DisplayName("회원 가입 시 이메일 형식을 지켜야합니다. (@ 포함)")
 	void joinMemberWithoutEmailFormat() throws Exception {
 		// given
-		MemberCreateRequest request = MemberCreateRequest.builder()
+		MemberSignUpRequest request = MemberSignUpRequest.builder()
 			.email("xxxxxxx")
 			.password("yyyyyyyy")
 			.build();
@@ -97,7 +97,7 @@ class MemberControllerTest {
 	@DisplayName("비밀번호는 8자 이상 입력해야 합니다.")
 	void joinMemberWithoutPasswordFormat() throws Exception {
 		// given
-		MemberCreateRequest request = MemberCreateRequest.builder()
+		MemberSignUpRequest request = MemberSignUpRequest.builder()
 			.email("xxxxxxx@yyyyyyyyy")
 			.password("yy")
 			.build();
