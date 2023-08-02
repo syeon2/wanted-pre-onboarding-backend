@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import wanted.assignment.common.config.jwt.JwtAuthTokenProvider;
 import wanted.assignment.member.service.MemberService;
 import wanted.assignment.member.web.request.MemberCreateRequest;
 
@@ -29,6 +30,9 @@ class MemberControllerTest {
 	@MockBean
 	private MemberService memberService;
 
+	@MockBean
+	private JwtAuthTokenProvider jwtAuthTokenProvider;
+
 	@Test
 	@DisplayName("회원을 등록합니다.")
 	void joinMember() throws Exception {
@@ -40,7 +44,7 @@ class MemberControllerTest {
 
 		// when // then
 		mockMvc.perform(
-				post("/api/v1/member")
+				post("/api/v1/sign-up")
 					.content(objectMapper.writeValueAsString(request))
 					.contentType(MediaType.APPLICATION_JSON)
 			)
@@ -58,7 +62,7 @@ class MemberControllerTest {
 
 		// when // then
 		mockMvc.perform(
-				post("/api/v1/member")
+				post("/api/v1/sign-up")
 					.content(objectMapper.writeValueAsString(request))
 					.contentType(MediaType.APPLICATION_JSON)
 			)
@@ -79,7 +83,7 @@ class MemberControllerTest {
 
 		// when // then
 		mockMvc.perform(
-				post("/api/v1/member")
+				post("/api/v1/sign-up")
 					.content(objectMapper.writeValueAsString(request))
 					.contentType(MediaType.APPLICATION_JSON)
 			)
@@ -100,7 +104,7 @@ class MemberControllerTest {
 
 		// when // then
 		mockMvc.perform(
-				post("/api/v1/member")
+				post("/api/v1/sign-up")
 					.content(objectMapper.writeValueAsString(request))
 					.contentType(MediaType.APPLICATION_JSON)
 			)

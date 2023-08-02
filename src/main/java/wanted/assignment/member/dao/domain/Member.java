@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import wanted.assignment.common.generator.Sha256Util;
 import wanted.assignment.member.service.request.MemberCreateServiceRequest;
+import wanted.assignment.member.web.response.MemberSignInResponse;
 
 @Getter
 public class Member {
@@ -24,6 +25,14 @@ public class Member {
 		return Member.builder()
 			.email(request.getEmail())
 			.password(encryptPassword)
+			.build();
+	}
+
+	public MemberSignInResponse getSignInResponse(String jwtAuthToken) {
+		return MemberSignInResponse.builder()
+			.id(this.id)
+			.email(this.email)
+			.token(jwtAuthToken)
 			.build();
 	}
 }
