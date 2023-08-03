@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import wanted.assignment.member.dao.MemberRepository;
 import wanted.assignment.post.dao.PostDetailRepository;
 import wanted.assignment.post.dao.PostRepository;
 import wanted.assignment.post.dao.domain.Post;
@@ -18,11 +19,14 @@ import wanted.assignment.post.service.response.PostResponse;
 @RequiredArgsConstructor
 public class PostService {
 
+	private final MemberRepository memberRepository;
 	private final PostRepository postRepository;
 	private final PostDetailRepository postDetailRepository;
 
 	@Transactional
 	public Long createPost(PostCreateServiceRequest request) {
+		isExistMemberId(request.getUserId());
+
 		Long savedPostId = postRepository.save(Post.createFromServiceRequest(request));
 		PostDetail postDetail = PostDetail.createPostDetailFromServiceRequest(request, savedPostId);
 
@@ -54,5 +58,9 @@ public class PostService {
 	public void delete(Long id) {
 		postRepository.delete(id);
 		postDetailRepository.delete(id);
+	}
+
+	private void isExistMemberId(Long userId) {
+		memberRepository.findById(userId);
 	}
 }
