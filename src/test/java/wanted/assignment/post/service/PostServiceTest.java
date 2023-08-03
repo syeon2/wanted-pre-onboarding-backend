@@ -8,9 +8,8 @@ import java.util.NoSuchElementException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
+import wanted.assignment.TestBaseConfig;
 import wanted.assignment.post.dao.PostDetailRepository;
 import wanted.assignment.post.dao.PostRepository;
 import wanted.assignment.post.dao.domain.Post;
@@ -18,9 +17,7 @@ import wanted.assignment.post.service.request.PostCreateServiceRequest;
 import wanted.assignment.post.service.request.PostUpdateServiceRequest;
 import wanted.assignment.post.service.response.PostResponse;
 
-@ActiveProfiles("test")
-@SpringBootTest
-class PostServiceTest {
+class PostServiceTest extends TestBaseConfig {
 
 	@Autowired
 	private PostRepository postRepository;
