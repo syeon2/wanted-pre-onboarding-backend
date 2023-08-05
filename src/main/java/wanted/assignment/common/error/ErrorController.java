@@ -1,5 +1,7 @@
 package wanted.assignment.common.error;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,21 +16,27 @@ import wanted.assignment.common.error.exception.member.PasswordMismatchException
 @RestControllerAdvice
 public class ErrorController {
 
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler(NoSuchElementException.class)
+	public ApiResult<Void> handlerNoSuchElementException(NoSuchElementException exception) {
+		return ApiResult.onFailure(exception.getLocalizedMessage());
+	}
+
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({DuplicateEmailException.class, PasswordMismatchException.class})
-	public ApiResult<Void> handlerDuplicateEmailException(RuntimeException e) {
-		return ApiResult.onFailure(e.getLocalizedMessage());
+	public ApiResult<Void> handlerDuplicateEmailException(RuntimeException exception) {
+		return ApiResult.onFailure(exception.getLocalizedMessage());
 	}
 
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	@ExceptionHandler(CustomJwtTokenException.class)
-	public ApiResult<Void> handlerCustomJwtTokenException(CustomJwtTokenException e) {
-		return ApiResult.onFailure(e.getLocalizedMessage());
+	public ApiResult<Void> handlerCustomJwtTokenException(CustomJwtTokenException exception) {
+		return ApiResult.onFailure(exception.getLocalizedMessage());
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ApiResult<Void> handlerValidationException(MethodArgumentNotValidException e) {
-		return ApiResult.onFailure(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+	public ApiResult<Void> handlerValidationException(MethodArgumentNotValidException exception) {
+		return ApiResult.onFailure(exception.getBindingResult().getAllErrors().get(0).getDefaultMessage());
 	}
 }
