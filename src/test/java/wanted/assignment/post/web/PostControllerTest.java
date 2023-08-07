@@ -28,7 +28,7 @@ import wanted.assignment.common.config.jwt.JwtAuthTokenProvider;
 import wanted.assignment.common.config.jwt.MemberTokenInfo;
 import wanted.assignment.common.error.exception.jwt.CustomJwtTokenException;
 import wanted.assignment.common.generator.TimeGenerator;
-import wanted.assignment.post.dao.domain.Post;
+import wanted.assignment.post.dao.domain.PostSimple;
 import wanted.assignment.post.service.PostService;
 import wanted.assignment.post.service.response.PostResponse;
 import wanted.assignment.post.web.request.PostCreateRequest;
@@ -165,7 +165,7 @@ class PostControllerTest {
 	void findPostList() throws Exception {
 		// given
 		long postId = 1L;
-		List<Post> postList = List.of();
+		List<PostSimple> postList = List.of();
 
 		when(postService.findPostList(postId)).thenReturn(postList);
 
@@ -300,7 +300,7 @@ class PostControllerTest {
 
 		String jwtAuthToken = getJwtToken(userId, email);
 		MemberTokenInfo memberTokenInfo = parsingTokenToMember(jwtAuthToken);
-		
+
 		when(jwtAuthTokenProvider.validateToken(jwtAuthToken)).thenReturn(true);
 		when(jwtAuthTokenProvider.parsingTokenToMember(jwtAuthToken)).thenReturn(
 			MemberTokenInfo.builder().id(1L).email(email).build());
