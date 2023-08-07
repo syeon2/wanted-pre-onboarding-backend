@@ -10,9 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import wanted.assignment.TestBaseConfig;
-import wanted.assignment.post.dao.PostDetailRepository;
+import wanted.assignment.member.dao.MemberRepository;
+import wanted.assignment.member.dao.domain.Member;
 import wanted.assignment.post.dao.PostRepository;
-import wanted.assignment.post.dao.domain.Post;
+import wanted.assignment.post.dao.domain.PostSimple;
 import wanted.assignment.post.service.request.PostCreateServiceRequest;
 import wanted.assignment.post.service.request.PostUpdateServiceRequest;
 import wanted.assignment.post.service.response.PostResponse;
@@ -23,7 +24,7 @@ class PostServiceTest extends TestBaseConfig {
 	private PostRepository postRepository;
 
 	@Autowired
-	private PostDetailRepository postDetailRepository;
+	private MemberRepository memberRepository;
 
 	@Autowired
 	private PostService postService;
@@ -32,6 +33,7 @@ class PostServiceTest extends TestBaseConfig {
 	@DisplayName("게시글을 생성합니다.")
 	void createPost() {
 		// given
+		memberRepository.save(Member.builder().email("1234@4567").password("12345678").build());
 		PostCreateServiceRequest request = createPostRequest("title1", "content입니다.");
 
 		// when
@@ -44,10 +46,6 @@ class PostServiceTest extends TestBaseConfig {
 	@Test
 	@DisplayName("게시글 생성 중 예외가 발생하면 롤백합니다.")
 	void createPostException() {
-		// content는 null을 허용하지 않습니다.
-		// 전체적인 코드 진행 순서는 post 먼저 저장한 이후 postDetail을 저장하므로 title을 저장한 이후 content를 저장하려 시도할 것입니다.
-		// 이에 null값을 허용하지 않아 예외를 발생시킵니다.
-
 		// given
 		PostCreateServiceRequest request = createPostRequest("title1", null);
 
@@ -58,15 +56,13 @@ class PostServiceTest extends TestBaseConfig {
 		// then
 		assertThatThrownBy(() -> postRepository.findById(1L))
 			.isInstanceOf(NoSuchElementException.class);
-
-		assertThatThrownBy(() -> postDetailRepository.findById(1L))
-			.isInstanceOf(NoSuchElementException.class);
 	}
 
 	@Test
 	@DisplayName("커서 페이지네이션이 적용되어 모든 게시글 중 10개로 제한하여 페이지네이션합니다.")
 	void findAllLimit10() {
 		// given
+		memberRepository.save(Member.builder().email("1234@4567").password("12345678").build());
 		PostCreateServiceRequest request1 = createPostRequest("title1", "content입니다.1");
 		PostCreateServiceRequest request2 = createPostRequest("title1", "content입니다.2");
 		PostCreateServiceRequest request3 = createPostRequest("title1", "content입니다.3");
@@ -92,7 +88,7 @@ class PostServiceTest extends TestBaseConfig {
 		Long postId11 = postService.createPost(request11);
 
 		// when
-		List<Post> postList = postService.findPostList(1L);
+		List<PostSimple> postList = postService.findPostList(1L);
 
 		// then
 		assertThat(postList).hasSize(10)
@@ -115,6 +111,7 @@ class PostServiceTest extends TestBaseConfig {
 	@DisplayName("게시글 아이디를 사용하여 특정 게시글을 조회합니다.")
 	void findPost() {
 		// given
+		memberRepository.save(Member.builder().email("1234@4567").password("12345678").build());
 		String title = "title1";
 		String content = "content입니다.";
 		PostCreateServiceRequest request = createPostRequest(title, content);
@@ -133,6 +130,7 @@ class PostServiceTest extends TestBaseConfig {
 	@DisplayName("게시글 아이디를 사용하여 해당 게시글을 수정합니다.")
 	void updatePost() {
 		// given
+		memberRepository.save(Member.builder().email("1234@4567").password("12345678").build());
 		String title1 = "title1";
 		String content1 = "content입니다.";
 		PostCreateServiceRequest request1 = createPostRequest(title1, content1);
@@ -161,6 +159,7 @@ class PostServiceTest extends TestBaseConfig {
 	@DisplayName("게시글을 수정할 때 예외가 발생하면 롤백합니다.")
 	void updatePostException() {
 		// given
+		memberRepository.save(Member.builder().email("1234@4567").password("12345678").build());
 		String title1 = "title1";
 		String content1 = "content입니다.";
 		PostCreateServiceRequest request1 = createPostRequest(title1, content1);
@@ -188,6 +187,7 @@ class PostServiceTest extends TestBaseConfig {
 	@DisplayName("게시글 아이디를 사용하여 해당 게시글을 삭제합니다.")
 	void deletePost() {
 		// given
+		memberRepository.save(Member.builder().email("1234@4567").password("12345678").build());
 		String title1 = "title1";
 		String content1 = "content입니다.";
 		PostCreateServiceRequest request1 = createPostRequest(title1, content1);
@@ -200,9 +200,6 @@ class PostServiceTest extends TestBaseConfig {
 
 		// then
 		assertThatThrownBy(() -> postRepository.findById(postId))
-			.isInstanceOf(NoSuchElementException.class);
-
-		assertThatThrownBy(() -> postDetailRepository.findById(postId))
 			.isInstanceOf(NoSuchElementException.class);
 	}
 

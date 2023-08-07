@@ -7,18 +7,19 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import wanted.assignment.common.basewrapper.BaseEntity;
-import wanted.assignment.post.dao.domain.Post;
+import wanted.assignment.post.dao.domain.PostDetail;
+import wanted.assignment.post.dao.domain.PostSimple;
 
 @Mapper
 public interface PostMapper {
 
-	void save(BaseEntity<Post> post);
+	void save(BaseEntity<PostDetail> post);
 
-	Optional<Post> findById(Long id);
+	Optional<PostDetail> findById(Long id);
 
-	List<Post> findAll(Long id, Integer limit);
+	List<PostSimple> findAll(Long id, Integer limit);
 
-	void update(@Param("id") Long id, @Param("updateParam") BaseEntity<Post> post);
+	void update(@Param("id") Long id, @Param("updateParam") BaseEntity<PostDetail> post);
 
 	void delete(Long id);
 }

@@ -2,7 +2,6 @@ package wanted.assignment.post.service.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import wanted.assignment.post.dao.domain.Post;
 import wanted.assignment.post.dao.domain.PostDetail;
 
 @Getter
@@ -23,13 +22,13 @@ public class PostResponse {
 		this.content = content;
 	}
 
-	public static PostResponse of(Post post, PostDetail postDetail) {
+	public static PostResponse of(PostDetail post) {
 		return PostResponse.builder()
 			.id(post.getId())
 			.title(post.getTitle())
 			.viewCount(post.getViewCount())
 			.userId(post.getUserId())
-			.content(postDetail.getContent())
+			.content(post.getContent())
 			.build();
 	}
 }

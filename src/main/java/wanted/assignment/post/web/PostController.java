@@ -17,7 +17,7 @@ import wanted.assignment.common.annotation.JwtAuthorization;
 import wanted.assignment.common.basewrapper.ApiResult;
 import wanted.assignment.common.config.jwt.MemberTokenInfo;
 import wanted.assignment.common.error.exception.jwt.CustomJwtTokenException;
-import wanted.assignment.post.dao.domain.Post;
+import wanted.assignment.post.dao.domain.PostSimple;
 import wanted.assignment.post.service.PostService;
 import wanted.assignment.post.service.response.PostResponse;
 import wanted.assignment.post.web.request.PostCreateRequest;
@@ -42,8 +42,8 @@ public class PostController {
 	}
 
 	@GetMapping("/api/v1/post-list")
-	public ApiResult<List<Post>> findPostList(@RequestParam Long limit) {
-		List<Post> postList = postService.findPostList(limit);
+	public ApiResult<List<PostSimple>> findPostList(@RequestParam Long limit) {
+		List<PostSimple> postList = postService.findPostList(limit);
 		return ApiResult.onSuccess(postList);
 	}
 

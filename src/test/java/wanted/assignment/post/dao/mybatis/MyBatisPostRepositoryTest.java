@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import wanted.assignment.TestBaseConfig;
 import wanted.assignment.post.dao.PostRepository;
-import wanted.assignment.post.dao.domain.Post;
+import wanted.assignment.post.dao.domain.PostDetail;
+import wanted.assignment.post.dao.domain.PostSimple;
 
 class MyBatisPostRepositoryTest extends TestBaseConfig {
 
@@ -22,7 +23,7 @@ class MyBatisPostRepositoryTest extends TestBaseConfig {
 	@DisplayName("게시글을 추가합니다.")
 	void save() {
 		// given
-		Post post = createPost("제목");
+		PostDetail post = createPost("제목", "게시글 내용입니다.");
 
 		// when
 		Long savedPostId = postRepository.save(post);
@@ -36,35 +37,35 @@ class MyBatisPostRepositoryTest extends TestBaseConfig {
 	void findById() {
 		// given
 		String title = "title";
-		Post post = createPost(title);
+		PostDetail post = createPost(title, "게시글 내용입니다.");
 		Long savedPostId = postRepository.save(post);
 
 		assertThat(savedPostId).isEqualTo(1L);
 
 		// when
-		Post findPost = postRepository.findById(savedPostId);
+		PostDetail findPost = postRepository.findById(savedPostId);
 
 		// then
 		assertThat(findPost)
-			.extracting("id", "title", "viewCount", "userId")
-			.contains(1L, title, 0, 1L);
+			.extracting("id", "title", "viewCount", "content", "userId")
+			.contains(1L, title, 0, "게시글 내용입니다.", 1L);
 	}
 
 	@Test
 	@DisplayName("게시글을 모두 조회합니다. (커서 페이지네이션")
 	void findAll() {
 		// given
-		Post post1 = createPost("title1");
-		Post post2 = createPost("title2");
-		Post post3 = createPost("title3");
-		Post post4 = createPost("title4");
-		Post post5 = createPost("title5");
-		Post post6 = createPost("title6");
-		Post post7 = createPost("title7");
-		Post post8 = createPost("title8");
-		Post post9 = createPost("title9");
-		Post post10 = createPost("title10");
-		Post post11 = createPost("title11");
+		PostDetail post1 = createPost("title1", "게시글 내용입니다.");
+		PostDetail post2 = createPost("title2", "게시글 내용입니다.");
+		PostDetail post3 = createPost("title3", "게시글 내용입니다.");
+		PostDetail post4 = createPost("title4", "게시글 내용입니다.");
+		PostDetail post5 = createPost("title5", "게시글 내용입니다.");
+		PostDetail post6 = createPost("title6", "게시글 내용입니다.");
+		PostDetail post7 = createPost("title7", "게시글 내용입니다.");
+		PostDetail post8 = createPost("title8", "게시글 내용입니다.");
+		PostDetail post9 = createPost("title9", "게시글 내용입니다.");
+		PostDetail post10 = createPost("title10", "게시글 내용입니다.");
+		PostDetail post11 = createPost("title11", "게시글 내용입니다.");
 
 		postRepository.save(post1);
 		postRepository.save(post2);
@@ -79,7 +80,7 @@ class MyBatisPostRepositoryTest extends TestBaseConfig {
 		postRepository.save(post11);
 
 		// when
-		List<Post> all = postRepository.findAll(2L);
+		List<PostSimple> all = postRepository.findAll(2L);
 
 		// then
 		assertThat(all).hasSize(10)
@@ -103,30 +104,32 @@ class MyBatisPostRepositoryTest extends TestBaseConfig {
 	void update() {
 		// given
 		String title1 = "title1";
-		Post post1 = createPost(title1);
+		String content1 = "게시글 내용입니다.1";
+		PostDetail post1 = createPost(title1, content1);
 		Long savedPostId = postRepository.save(post1);
 
 		assertThat(savedPostId).isEqualTo(1L);
 
 		// when
 		String title2 = "title2";
-		Post post2 = createPost(title2);
+		String content2 = "게시글 내용입니다.2";
+		PostDetail post2 = createPost(title2, content2);
 
 		postRepository.update(savedPostId, post2);
 
 		// then
-		Post findPost = postRepository.findById(savedPostId);
+		PostDetail findPost = postRepository.findById(savedPostId);
 
 		assertThat(findPost)
-			.extracting("id", "title", "viewCount", "userId")
-			.contains(1L, title2, 0, 1L);
+			.extracting("id", "title", "viewCount", "content", "userId")
+			.contains(1L, title2, 0, content2, 1L);
 	}
 
 	@Test
 	@DisplayName("게시글 아이디를 사용하여 해당 게시글을 삭제합니다.")
 	void delete() {
 		// given
-		Post post = createPost("title1");
+		PostDetail post = createPost("title1", "게시글 내용입니다.");
 		Long savedPostId = postRepository.save(post);
 
 		assertThat(savedPostId).isEqualTo(1L);
@@ -139,11 +142,12 @@ class MyBatisPostRepositoryTest extends TestBaseConfig {
 			.isInstanceOf(NoSuchElementException.class);
 	}
 
-	private Post createPost(String title) {
-		return Post.builder()
+	private PostDetail createPost(String title, String content) {
+		return PostDetail.builder()
 			.title(title)
 			.viewCount(0)
 			.userId(1L)
+			.content(content)
 			.build();
 	}
 }

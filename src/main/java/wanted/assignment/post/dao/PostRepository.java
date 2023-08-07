@@ -2,17 +2,18 @@ package wanted.assignment.post.dao;
 
 import java.util.List;
 
-import wanted.assignment.post.dao.domain.Post;
+import wanted.assignment.post.dao.domain.PostDetail;
+import wanted.assignment.post.dao.domain.PostSimple;
 
 public interface PostRepository {
 
-	Long save(Post post);
+	Long save(PostDetail post);
 
-	Post findById(Long id);
+	PostDetail findById(Long id);
 
-	List<Post> findAll(Long id);
+	List<PostSimple> findAll(Long id);
 
-	Long update(Long id, Post post);
+	Long update(Long id, PostDetail post);
 
 	void delete(Long id);
 }

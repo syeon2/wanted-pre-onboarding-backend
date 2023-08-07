@@ -4,18 +4,18 @@
 <mapper namespace="wanted.assignment.post.dao.mybatis.PostMapper">
 
     <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="data.id">
-        insert into post (title, view_count, user_id, created_at, updated_at)
-        values (#{data.title}, #{data.viewCount}, #{data.userId}, #{createdAt}, #{updatedAt})
+        insert into post (title, view_count, user_id, content, created_at, updated_at)
+        values (#{data.title}, #{data.viewCount}, #{data.userId}, #{data.content}, #{createdAt}, #{updatedAt})
     </insert>
 
-    <select id="findById">
+    <select id="findById" resultType="wanted.assignment.post.dao.domain.PostDetail">
         select *
         from post
         where id = #{id}
     </select>
 
-    <select id="findAll">
-        select *
+    <select id="findAll" resultType="wanted.assignment.post.dao.domain.PostSimple">
+        select id, title, view_count, user_id
         from post
         where id >= #{id}
         order by created_at desc
@@ -25,6 +25,7 @@
     <update id="update">
         update post
         set title      = #{updateParam.data.title},
+            content    = #{updateParam.data.content},
             updated_at = #{updateParam.updatedAt}
         where id = #{id}
     </update>

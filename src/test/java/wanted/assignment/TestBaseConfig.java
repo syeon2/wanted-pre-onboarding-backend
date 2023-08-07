@@ -21,7 +21,7 @@ public class TestBaseConfig {
 		jdbcTemplate.execute("delete from post");
 		jdbcTemplate.execute("alter table post auto_increment = 1");
 
-		jdbcTemplate.execute("delete from post_detail");
-		jdbcTemplate.execute("alter table post_detail auto_increment = 1");
+		jdbcTemplate.execute("delete from comment");
+		jdbcTemplate.execute("alter table comment auto_increment = 1");
 	}
 }
