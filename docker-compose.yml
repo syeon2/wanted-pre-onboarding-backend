@@ -1,0 +1,39 @@
+version: "3.0"
+services:
+  product_db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: board_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: 1234
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./mysql/initdb.d:/docker-entrypoint-initdb.d/
+    command:
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+
+  test_db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: test_board_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: 1234
+    ports:
+      - '33060:3306'
+    volumes:
+      - ./mysql/initdb.d:/docker-entrypoint-initdb.d/
+    command:
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+
+  application:
+    build: .
+    restart: on-failure
+    ports:
+      - '8080:8080'
+    depends_on:
+      - product_db

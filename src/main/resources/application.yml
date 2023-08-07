@@ -1,0 +1,45 @@
+#-------- Default --------
+spring:
+  profiles:
+    default: product
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/**/*.xml
+
+jwt:
+  secret: 7c8d3c13bd32be41c39655f87737422920037a5ccf569bf8484511cf5241ceec
+  header: x-auth-token
+  expired_minutes: 30
+
+---
+#-------- product --------
+spring:
+  config:
+    activate:
+      on-profile: product
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://product_db:3306/board_db
+    username: user
+    password: 1234
+
+
+---
+##-------- test --------
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:33060/test_board_db
+    username: user
+    password: 1234
+
+  sql:
+    init:
+      mode: always
