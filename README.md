@@ -22,7 +22,7 @@
 
 #### 🟤 데이터베이스 테이블 구조
 
-<img src="https://i.ibb.co/q7HNvtr/Screenshot-2023-08-07-at-4-08-17-PM.png" width="800" />
+<img src="https://i.ibb.co/J3BXGnJ/wanted-db.png" width="800" >
 
 ----
 
